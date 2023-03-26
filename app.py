@@ -1,46 +1,20 @@
-from flask import Flask,render_template,jsonify
-
+from flask import Flask, render_template, jsonify, request
+from database import load_jobs_from_db
+from sqlalchemy import text
 
 app = Flask(__name__)
-JOBS =[
-  {
-    "ID":1,
-    "TITLE":"DATA ANALYST",
-    "LOCATION":"BENGALURU,INDIA",
-    "SALARY":"10 LPA"
-    
-  },
-  {
-    "ID":2,
-    "TITLE":"DATA SCIENTIST",
-    "LOCATION":"DELHI,INDIA",
-    "SALARY":"15 LPA"
-  },
 
-  {
-    
-    "ID":3,
-    "TITLE":"FRONT END ENGINEER",
-    "LOCATION":"REMOTE",
-    "SALARY":"12 LPA"
-  },
-  {
-    
-    "ID":4,
-    "TITLE":"BACK END ENGINEER",
-    "LOCATION":"SAN FRANSICO ,USA",
-    "SALARY":"$120,000"
-  }
-  
-]
 
 @app.route("/")
-def helloworld():
-  return render_template("home.html",jobs =JOBS)
+def hello_jovian():
+  jobs = load_jobs_from_db()
+  return render_template('home.html',jobs = jobs)
+
 
 @app.route("/api/jobs")
 def list_jobs():
-  return jsonify(JOBS)
+  jobs = load_jobs_from_db()
+  return jsonify(jobs)
 
-if __name__ == "__main__":
-  app.run(host = "0.0.0.0",debug = True)
+if __name__ == '__main__':
+  app.run(host='0.0.0.0', debug=True)
